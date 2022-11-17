@@ -1,3 +1,1 @@
-export { default as Matcher } from './core/matcher';
-
-// export default Matcher;
+export { default as Pipe } from './core/pipe';

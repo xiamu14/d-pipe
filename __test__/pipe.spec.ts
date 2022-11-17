@@ -1,4 +1,4 @@
-import Matcher from '../src/core/matcher';
+import Matcher from '../src/core/pipe';
 
 describe('type error', () => {
   test('string', () => {
