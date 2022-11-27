@@ -5,11 +5,10 @@
  <img src="https://img.shields.io/badge/coverage-100%25-brightgreen">
  <img src="https://img.shields.io/badge/min%20size-1%20kb-blue">
  <img src="https://img.shields.io/npm/dt/data-matcher.svg?colorB=ff69b4">
+ <!-- <img src="https://img.shields.io/npm/dt/d-pipe.svg?colorB=ff69b4"> -->
  </p>
 
-## 数据适配器
-
-> 本文档是 v2 版本内容，v1 版本已经处于废弃 ⚠️ 阶段，请及时升级（codeMod 正在开发中，当前请手动修改）。维护阶段如果仍需参考 v1 文档，请访问 [v1 文档](https://github.com/xiamu14/data-matcher/blob/master/src/v1/README.md)
+## 数据管道转换工具
 
 ## 用途
 
@@ -30,28 +29,28 @@
 ## 安装
 
 ```bash
-yarn add data-matcher
+yarn add d-pipe
 ```
 
 ```bash
-pnpm install data-matcher
+pnpm install d-pipe
 ```
 
 ## 使用
 
 ```js
 const data = { a: 'a', b: 'b' };
-const matcher = new Matcher(data);
-matcher
+const pipe = new Pipe(data);
+pipe
   .add('c', () => 'c')
   .delete(['b'])
   .editValue('a', () => 'aa');
-matcher.data; // { a: 'aa', c: 'c' }
+pipe.data; // { a: 'aa', c: 'c' }
 ```
 
-> Tips：传入的数据必须是非空对象和非空数组，{} 和 [] 都是不允许的数据。开发者必须在业务中明确判断数据是非空的，才能传递给 Matcher。
+> Tips：传入的数据必须是非空对象和非空数组，{} 和 [] 都是不允许的数据。开发者必须在业务中明确判断数据是非空的，才能传递给 Pipe。
 >
-> 否则 Matcher 将抛出一个类型错误： The dataSet must be an Object or Array,and cannot be an empty object or empty array.
+> 否则 Pipe 将抛出一个类型错误： The dataSet must be an Object or Array,and cannot be an empty object or empty array.
 
 ## 方法
 
@@ -72,9 +71,9 @@ matcher.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { startTime: '2019/09/12', endTime: '2019/09/30' };
-  const matcher = new Matcher(data);
-  matcher.add('dateRange', (data) => `${data.startTime}-${data.endTime}`);
-  matcher.data; // {startTime: '2019/09/12', endTime: '2019/09/30', dateRange:'2019/09/12-2019/09/30'}
+  const pipe = new Pipe(data);
+  pipe.add('dateRange', (data) => `${data.startTime}-${data.endTime}`);
+  pipe.data; // {startTime: '2019/09/12', endTime: '2019/09/30', dateRange:'2019/09/12-2019/09/30'}
   ```
 
 ### pick (取出指定数据)
@@ -94,9 +93,9 @@ matcher.data; // { a: 'aa', c: 'c' }
 
   ```js
   const data = { key: '1', label: 'apple', value: 'apple' };
-  const matcher = new Matcher(data);
-  matcher.pick(['label']);
-  matcher.data; // {label: 'apple',}
+  const pipe = new Pipe(data);
+  pipe.pick(['label']);
+  pipe.data; // {label: 'apple',}
   ```
 
 - 场景
@@ -120,9 +119,9 @@ matcher.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { key: '1', label: 'apple', value: 'apple' };
-  const matcher = new Matcher(data);
-  matcher.delete(['label']);
-  matcher.data; // {key:'1',value:'apple'}
+  const pipe = new Pipe(data);
+  pipe.delete(['label']);
+  pipe.data; // {key:'1',value:'apple'}
   ```
 
 ### editValue (修改 value)
@@ -145,11 +144,11 @@ matcher.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { price: 1, createAt: 1632833413149 }; // 价格服务端存储单位[分]
-  const matcher = new Matcher(data);
-  matcher
+  const pipe = new Pipe(data);
+  pipe
     .editValue('price', (value) => value / 100)
     .editValue('createAt', (value) => dayjs(value).format('YYYY/MM/DD'));
-  matcher.data; // {price:0.01, createAt:'2021/09/28'}
+  pipe.data; // {price:0.01, createAt:'2021/09/28'}
   ```
 
 ### editKey (修改 key)
@@ -168,7 +167,7 @@ matcher.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { id: '1' };
-  const matcher = new Matcher(data);
+  const matcher = new Pipe(data);
   matcher.editKey({ id: 'key' });
   marcher.data; // {key:'1'}
   ```
@@ -189,9 +188,9 @@ matcher.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { a: 'a', b: { bb: 'bb' } };
-  const matcher = new Matcher(data);
-  matcher.clone({ a: 'a/' });
-  matcher.data; // {a:'a', b:{bb:'bb'}, 'a/':'a'}
+  const pipe = new Pipe(data);
+  pipe.clone({ a: 'a/' });
+  pipe.data; // {a:'a', b:{bb:'bb'}, 'a/':'a'}
   ```
 
 ### clean (清除无意义的数据)
@@ -214,9 +213,9 @@ matcher.data; // { a: 'aa', c: 'c' }
 
   ```js
   const data = { price: 100, projectId: undefined };
-  const matcher = new Matcher(data);
-  matcher.clean([undefined]);
-  matcher.data; // {price:100}
+  const pipe = new Pipe(data);
+  pipe.clean([undefined]);
+  pipe.data; // {price:100}
   ```
 
 ### when (根据条件组合操作)
@@ -239,9 +238,9 @@ matcher.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { a: 'a', b: { bb: 'bb' } };
-  const matcher = new Matcher(data);
-  matcher.when(data.a === 'a', (that) => that.add('aa', () => 'aa'), null);
-  matcher.data; // {a:'a', b:{bb:'bb'}, 'aa':'aa'}
+  const pipe = new Pipe(data);
+  pipe.when(data.a === 'a', (that) => that.add('aa', () => 'aa'), null);
+  pipe.data; // {a:'a', b:{bb:'bb'}, 'aa':'aa'}
   ```
 
 ## 特性
@@ -258,19 +257,19 @@ matcher.data; // { a: 'aa', c: 'c' }
    // 源码测试用例
    test('valueDelivery', () => {
      const data = { a: 'a', b: 'b' };
-     const matcher = new Matcher(data);
-     matcher
+     const pipe = new Pipe(data);
+     pipe
        .add('c', () => 'c')
        .delete(['b'])
        .editValue('a', () => 'aa');
-     expect(matcher.data).toEqual({ a: 'aa', c: 'c' }); // pass
+     expect(pipe.data).toEqual({ a: 'aa', c: 'c' }); // pass
      // 顺序无关
-     matcher
+     pipe
        .editValue('a', () => 'aa')
        .add('c', () => 'c')
        .delete(['b']);
-     expect(matcher.data).toEqual({ a: 'aa', c: 'c' }); // pass
+     expect(pipe.data).toEqual({ a: 'aa', c: 'c' }); // pass
    });
    ```
-3. 归纳操作：Matcher 内部会收集所有调用方法，以便于对数组数据只使用一次遍历完成数据操作
+3. 归纳操作：Pipe 内部会收集所有调用方法，以便于对数组数据只使用一次遍历完成数据操作
 4. 链式调用：使用链式调用方法，对数据的操作代码更有组织性
