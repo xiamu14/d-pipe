@@ -1,12 +1,12 @@
 {
-  "name": "data-pipe",
-  "version": "3.0.2",
+  "name": "d-pipe",
+  "version": "1.0.3",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
-  "registry": "https://github.com/xiamu14/data-matcher",
-  "homepage": "https://github.com/xiamu14/data-matcher",
+  "registry": "https://github.com/xiamu14/d-pipe",
+  "homepage": "https://github.com/xiamu14/d-pipe",
   "files": [
     "dist/*"
   ],
