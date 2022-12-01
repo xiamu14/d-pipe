@@ -12,6 +12,7 @@
 
 ## 用途
 
+45
 在数据处理过程中，不同环节所储存或反馈的数据字段、类型总会存在差异。
 
 服务端 api 数据和前端数据的差异，前端组件和第三方组件数据的差异，数据在不同环节的差异等。
@@ -167,9 +168,9 @@ pipe.data; // { a: 'aa', c: 'c' }
 - 示例
   ```js
   const data = { id: '1' };
-  const matcher = new Pipe(data);
-  matcher.editKey({ id: 'key' });
-  marcher.data; // {key:'1'}
+  const pipe = new Pipe(data);
+  pipe.editKey({ id: 'key' });
+  pipe.data; // {key:'1'}
   ```
 
 ### clone (拷贝数据)
@@ -225,8 +226,8 @@ pipe.data; // { a: 'aa', c: 'c' }
   ```js
   public when(
     condition: boolean,
-    whenTruthy: ((that: Matcher) => void) | null,
-    whenFalsy: ((that: Matcher) => void) | null,
+    whenTruthy: ((that: Pipe) => void) | null,
+    whenFalsy: ((that: Pipe) => void) | null,
   )
   ```
 
