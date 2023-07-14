@@ -40,6 +40,7 @@ pnpm install d-pipe
 ## 使用
 
 ```js
+import { Pipe } from 'd-pipe';
 const data = { a: 'a', b: 'b' };
 const pipe = new Pipe(data);
 pipe
